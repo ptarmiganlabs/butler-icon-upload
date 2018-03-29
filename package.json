@@ -1,0 +1,19 @@
+{
+  "name": "icon_uploader",
+  "version": "1.0.0",
+  "description": "Uploads icons into Qlik Sense content library",
+  "main": "icon_uploader.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Göran Sander, Ptarmigan Labs AB",
+  "license": "ISC",
+  "dependencies": {
+    "config": "^1.30.0",
+    "glob": "^7.1.2",
+    "js-yaml": "^3.11.0",
+    "qrs-interact": "^3.0.0",
+    "winston": "^2.4.1",
+    "yargs": "^11.1.0"
+  }
+}
