@@ -18,7 +18,7 @@ If you want to convert existing icon fonts to bitmap images, you also need to in
 
 With that in place, you should install the actual upload tool.
 
-* Download the tool from the [releases page](https://github.com/mountaindude/butler-icon-upload/releases).
+* Download the tool from the [releases page](https://github.com/ptarmiganlabs/butler-icon-upload/releases).
 * Unzip to suitable location, for example ~/butler-icon-upload. cd into this directory.
 * Install dependencies by running `npm install`.
 
