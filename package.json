@@ -1,19 +1,33 @@
 {
   "name": "icon_uploader",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "description": "Uploads icons into Qlik Sense content library",
   "main": "icon_uploader.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Göran Sander, Ptarmigan Labs AB",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ptarmiganlabs/butler-icon-upload"
+  },
+  "keywords": [
+    "qliksense",
+    "butler",
+    "senseops"
+  ],
+  "author": "Göran Sander",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ptarmiganlabs/butler-icon-upload/issues"
+  },
+  "homepage": "https://github.com/ptarmiganlabs/butler-icon-upload#readme",
   "dependencies": {
-    "config": "^3.0.0",
-    "glob": "^7.1.2",
-    "js-yaml": "^3.11.0",
-    "qrs-interact": "^4.0.0",
-    "winston": "^3.0.0",
-    "yargs": "^15.0.0"
+    "config": "^3.3.6",
+    "glob": "^7.1.7",
+    "js-yaml": "^4.1.0",
+    "qrs-interact": "^6.2.1",
+    "timer-queue": "^1.1.0",
+    "winston": "^3.3.3",
+    "yargs": "^17.0.1"
   }
 }
