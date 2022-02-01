@@ -1,5 +1,4 @@
 ﻿const fs = require('fs');
-// var fs = require('fs-extra');
 const path = require('path');
 const QrsInteract = require('qrs-interact');
 const config = require('config');
@@ -26,10 +25,46 @@ const args = require('yargs')
         'node $0 -i ./icons -c "My icons"',
         'Uploads icons in ./icons folder to content library named "My icons"'
     )
+    .option('iconfolder', {
+        alias: 'i',
+        demandOption: true,
+        describe: 'Path to directory where icon files are located',
+    })
+    .option('contentlibrary', {
+        alias: 'c',
+        demandOption: true,
+        describe: 'Name of Qlik Sense content library to which icons iwll be uploaded',
+    })
+    .option('upload-interval', {
+        demandOption: false,
+        default: 2000,
+        describe: 'Time to wait between icon uploads (milliseconds)',
+    })
+    .option('upload-timeout', {
+        demandOption: false,
+        default: 5000,
+        describe: 'Time to wait for upload to complete (milliseconds)',
+    })
+    .option('upload-retries', {
+        demandOption: false,
+        default: 5,
+        describe: 'Number of retry attempts to make if an uploade fails',
+    })
+    .option('upload-retry-interval', {
+        demandOption: false,
+        default: 10000,
+        describe: 'Time to wait between retry attempts (milliseconds)',
+    })
     .demandOption(['i', 'c'])
-    .alias('i', 'iconfolder')
-    .alias('c', 'contentlibrary')
+    .epilogue(
+        'for more information, please visit https://github.com/ptarmiganlabs/butler-icon-upload'
+    )
+    .wrap(120)
     .alias('h', 'help').argv;
+
+// Retry counter. Used to keep track of how many upload attempts have been done for the file that's currently being processed
+let attemptNumber = 1;
+
 
 // Get app version from package.json file
 const appVersion = require('./package.json').version;
@@ -66,16 +101,12 @@ const logger = winston.createLogger({
 // Function to get current logging level
 const getLoggingLevel = () => logTransports.find((transport) => transport.name === 'console').level;
 
-logger.debug(`QRS config: ${configQRS}`);
-logger.info(`Using icons in folder: ${iconFolderAbsolute}`);
-logger.info(`Uploading icons to Qlik Sense content library: ${contentlibrary}`);
-
 // Upload queue
 const tqueue = new TimerQueue({
-    interval: 2000,
-    timeout: 5000,
-    retry: 5,
-    retryInterval: 10000,
+    interval: args.uploadInterval,
+    timeout: args.uploadTimeout,
+    retry: args.uploadRetries,
+    retryInterval: args.uploadRetryInterval,
     autostart: false,
 });
 
@@ -93,10 +124,19 @@ logger.info(`Log level: ${getLoggingLevel()}`);
 logger.info(`App version: ${appVersion}`);
 logger.info('--------------------------------------');
 
-// Debug output of Node.js environment
-logger.info(`NODE_CONFIG_DIR: ${config.util.getEnv('NODE_CONFIG_DIR')}`);
-logger.info(`NODE_ENV: ${config.util.getEnv('NODE_ENV')}`);
-logger.info(`NODE_CONFIG_ENV: ${config.util.getEnv('NODE_CONFIG_ENV')}`);
+// Node.js environment variables
+logger.verbose(`NODE_CONFIG_DIR: ${config.util.getEnv('NODE_CONFIG_DIR')}`);
+logger.verbose(`NODE_ENV: ${config.util.getEnv('NODE_ENV')}`);
+logger.verbose(`NODE_CONFIG_ENV: ${config.util.getEnv('NODE_CONFIG_ENV')}`);
+
+logger.debug(`QRS config: ${configQRS}`);
+logger.info(`Using icons in folder: ${iconFolderAbsolute}`);
+logger.info(`Uploading icons to Qlik Sense content library: ${contentlibrary}`);
+
+logger.info(`Image upload interval: ${args.uploadInterval} (ms)`);
+logger.info(`Image upload timeout: ${args.uploadTimeout} (ms)`);
+logger.info(`Image upload retry count: ${args.uploadRetries}`);
+logger.info(`Image upload retry interval: ${args.uploadRetryInterval} (ms)`);
 
 function addFiles() {
     return new Promise((resolve, reject) => {
@@ -116,7 +156,9 @@ function addFiles() {
                     tqueue.push(() => {
                         const promise = new Promise((resolve2, reject2) => {
                             try {
-                                logger.info(`Uploading file: ${fileFullPath}`);
+                                logger.info(
+                                    `Uploading file (attempt ${attemptNumber}): ${fileFullPath}`
+                                );
 
                                 const apiURL = `/contentlibrary/${encodeURIComponent(
                                     contentlibrary
@@ -129,29 +171,31 @@ function addFiles() {
                                     .then((result) => {
                                         logger.debug(`result=${JSON.stringify(result)}`);
                                         logger.verbose(`Done: ${file}`);
+                                        attemptNumber = 1;
                                         resolve2();
                                     })
                                     .catch((err) => {
                                         // Return error msg
+                                        logger.error(`${err}`);
                                         logger.error(
-                                            `Error (1) uploading "${file}" to content library: ${err}`
+                                            `Will try ${args.uploadRetries} times with a ${args.uploadRetryInterval} ms pause in between retries.`
                                         );
-                                        logger.error(`Will retry a few times..`);
+                                        attemptNumber += 1;
                                         reject2(new Error('retry'));
                                     });
-                            } catch (err) {
+                            } catch (err2) {
                                 // Return error msg
                                 logger.error(
-                                    `Error (2) uploading "${file}" to content library: ${err}`
+                                    `Error (2) uploading "${file}" to content library: ${err2}`
                                 );
-                                logger.error(`Will retry a few times..`);
+                                logger.error(err2);
                                 reject2(new Error('retry'));
                             }
                         });
                         return promise;
                     });
                 } else if (fileStat.isDirectory()) {
-                    logger.verbose(`${fileFullPath} is a directory.`);
+                    logger.verbose(`${fileFullPath} is a directory. Skipping.`);
                 }
             }
             resolve();
@@ -164,7 +208,7 @@ function addFiles() {
 
 async function mainFunction() {
     await addFiles();
-    logger.info('All files added to queue');
+    logger.info(`${tqueue.queue.length} files added to upload queue`);
     tqueue.start();
 }
 

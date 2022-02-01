@@ -20,7 +20,9 @@
                 "-i",
                 "./fonts/fontawesome/thumbnail_green",
                 "-c",
-                "Thumbnails (green)"
+                "Thumbnails (green)",
+                "--upload-interval",
+                "10"
             ]
         }
     ]
