@@ -13,6 +13,7 @@
   "keywords": [
     "qliksense",
     "butler",
+    "butler icon upload",
     "senseops"
   ],
   "author": "Göran Sander",
@@ -23,11 +24,20 @@
   "homepage": "https://github.com/ptarmiganlabs/butler-icon-upload#readme",
   "dependencies": {
     "config": "^3.3.6",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-prettier": "^4.0.0",
     "glob": "^7.1.7",
     "js-yaml": "^4.1.0",
     "qrs-interact": "^6.2.1",
     "timer-queue": "^1.1.0",
     "winston": "^3.3.3",
     "yargs": "^17.0.1"
+  },
+  "devDependencies": {
+    "prettier": "2.5.1",
+    "snyk": "1.842.0"
   }
 }
