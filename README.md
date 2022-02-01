@@ -1,20 +1,33 @@
-# Butler Icon Upload for Qlik Sense
+<h1 align="center">
+<img src="./icon.png" alt="Butler Icon Upload logo">
+</h1>
+<h3 align="center">Butler Icon Upload makes it easy to use free, professional quality icons and images in Qlik Sense Enterprise on Windows</h3>
+<p align="center">
+<a href="https://github.com/ptarmiganlabs/butler-icon-upload"><img src="https://img.shields.io/badge/Source---" alt="Source"></a>
+</p>
+<br>
+<br>
+<br>
+<br>
 
-The "Butler icon upload" tool makes it easy to use free, professional quality icons and images in Qlik Sense.
+# Features
 
-
-## Features
-* Thousands of free icons available, including Google Material Design, Font Awesome and others. 
+* Thousands of free icons available, including Google Material Design, Font Awesome and others.
 * The upload tool handles any image format accepted by Qlik Sense.
-* Batch upload of icons and images to Qlik Sense. No more 50-at-a-time uploads. 
+* Batch upload of icons and images to Qlik Sense. No more 50-at-a-time uploads.
 * The tool was written with Sense enterprise in mind. Should be possible to adopt to Qlik Sense desktop too.
 
-## Installation
+# Installation
 
 The tool is built using Node.js, please refer to the [Node.js site](https://nodejs.org/en/) for installation instructions for your platform (OSX/Windows/Linux).  
-Butler Icon Upload was developed on OSX, using Node.js 8.9.4. Your milage on especially Windows may vary.
+The latest LTS version of Node.js is usually a good choice.  
 
-If you want to convert existing icon fonts to bitmap images, you also need to install [Icon Font to PNG](https://github.com/Pythonity/icon-font-to-png). This utility is not needed if your images are already in bitmap (png or jpg) format. 
+Your milage on especially Windows may vary due to some libraries used by this tool not being available/fully working there.  
+It's mainly the image manipulation parts that don't work well on Windows, the icon uploading part (i.e. the Node.js app) should be ok.
+Linux should work without issues.
+
+If you want to convert existing icon fonts to bitmap images, you also need to install [Icon Font to PNG](https://github.com/Pythonity/icon-font-to-png).  
+This utility is not needed if your images are already in bitmap (png or jpg) format.
 
 With that in place, you should install the actual upload tool.
 
@@ -22,32 +35,39 @@ With that in place, you should install the actual upload tool.
 * Unzip to suitable location, for example ~/butler-icon-upload. cd into this directory.
 * Install dependencies by running `npm install`.
 
-The final tool you need is [ImageMagick](https://www.imagemagick.org). This might be hard to run on a Windows computer, so Linux or OSX is recommended. 
-
+The final tool you need is [ImageMagick](https://www.imagemagick.org).  
+This might be hard to run on a Windows computer, so Linux or OSX is recommended.  
+ImageMagick is used to modify the images so they get the correct aspect ratio.  
+If this step is not done square images will appear as stretched when used as sheet icons.
 
 Test your work so far. You should see output similar to the below.
 
-```
-proton:butler-icon-upload goran$ node icon_uploader.js
+```bash
+➜  butler-icon-upload node icon_uploader.js
 Usage: icon_uploader.js -i [path/to/icon/files] -c [content library name]
 
 Options:
-  --version             Show version number                            [boolean]
-  -h, --help            Show help                                      [boolean]
-  -i, --iconfolder                                                    [required]
-  -c, --contentlibrary                                                [required]
+      --version                Show version number                                                             [boolean]
+  -i, --iconfolder             Path to directory where icon files are located                                 [required]
+  -c, --contentlibrary         Name of Qlik Sense content library to which icons iwll be uploaded             [required]
+      --upload-interval        Time to wait between icon uploads (milliseconds)                          [default: 2000]
+      --upload-timeout         Time to wait for upload to complete (milliseconds)                        [default: 5000]
+      --upload-retries         Number of retry attempts to make if an uploade fails                         [default: 5]
+      --upload-retry-interval  Time to wait between retry attempts (milliseconds)                       [default: 10000]
+  -h, --help                   Show help                                                                       [boolean]
 
 Examples:
-  node icon_uploader.js -i ./icons -c "My   Uploads icons in ./icons folder to
-  icons"                                    content library named "My icons"
+  node icon_uploader.js -i ./icons -c "My icons"  Uploads icons in ./icons folder to content library named "My icons"
 
-Missing required arguments: i, c
+for more information, please visit https://github.com/ptarmiganlabs/butler-icon-upload
 
+Missing required arguments: iconfolder, contentlibrary, i, c
+➜  butler-icon-upload
 ```
 
 Let's test the "Icon Font to PNG" tool too:
 
-```
+```bash
 proton:butler-icon-upload goran$ icon-font-to-png
 usage: icon-font-to-png [-h] [--list] [--download {font-awesome,octicons}]
                         [--ttf TTF-FILE] [--css CSS-FILE] [--size SIZE]
@@ -59,13 +79,14 @@ icon-font-to-png: error: You have to provide CSS and TTF files
 
 And ImageMagick:
 
-```
-proton:butler-icon-upload goran$ convert
-Version: ImageMagick 7.0.7-22 Q16 x86_64 2018-01-22 http://www.imagemagick.org
-Copyright: © 1999-2018 ImageMagick Studio LLC
-License: http://www.imagemagick.org/script/license.php
-Features: Cipher DPC HDRI Modules
-Delegates (built-in): bzlib freetype jng jpeg ltdl lzma png tiff xml zlib
+```bash
+➜  butler-icon-upload convert
+Version: ImageMagick 7.1.0-19 Q16-HDRI x86_64 2021-12-22 https://imagemagick.org
+Copyright: (C) 1999-2021 ImageMagick Studio LLC
+License: https://imagemagick.org/script/license.php
+Features: Cipher DPC HDRI Modules OpenMP(5.0)
+Delegates (built-in): bzlib fontconfig freetype gslib heic jng jp2 jpeg lcms lqr ltdl lzma openexr png ps tiff webp xml zlib
+Compiler: gcc (4.2)
 Usage: convert [options ...] file [ [options ...] file ...] [options ...] file
 
 Image Settings:
@@ -73,21 +94,15 @@ Image Settings:
   -affine matrix       affine transform matrix
   -alpha option        activate, deactivate, reset, or set the alpha channel
   -antialias           remove pixel-aliasing
-  -authenticate password
-                       decipher image with this password
-  -attenuate value     lessen (or intensify) when adding noise to an image
-  -background color    background color
 ...
 ...
 
 ```
 
-
-
-
 Great - you now have the tools needed to batch convert and upload icons and images to Qlik Sense.
 
-## Finding icons
+# Finding icons
+
 The "Butler Icon Upload" tool does not include any actual icons.  
 Instead, you need to find these elsewhere. The good news is that there are various online resources from where you can download professional quality icon sets.
 
@@ -95,11 +110,14 @@ Some of the more commonly used icon sets are Google's [Material Design](https://
 
 If you download icons from some online source, you need to get a) a css file for the webfont, and b) the webfont file itself.
 
-### Download icons
-[IcoMoon](https://icomoon.io/app/#/select) works great for getting the needed icon resources. It is basically a web app that wraps some of the most common icon sets in a nice web UI. Select the icons you want - let it be 5 or 500 - click download and you are done.
-The app also offers IcoMoon's own icon sets for purchase. 
+## Download icons
 
-IcoMoon is very easey to use, but let's take a look at how the hundreds of icons in Font Awesome can be downloaded:
+[IcoMoon](https://icomoon.io/app/#/select) works great for getting the needed icon resources.  
+It is basically a web app that wraps some of the most common icon sets in a web UI.  
+Select the icons you want - let it be 5 or 500 - click download and you are done.
+The app also offers IcoMoon's own icon sets for purchase.
+
+IcoMoon is very easy to use, but let's take a look at how the hundreds of icons in Font Awesome can be downloaded:
 
 1. Go to IcoMoon's [selection page](https://icomoon.io/app/#/select).
 2. Click the "Add Icons From Library" link.
@@ -109,33 +127,32 @@ IcoMoon is very easey to use, but let's take a look at how the hundreds of icons
 6. After a few seconds you will get a download link. Click it to download the icons.
 7. You now have a file called icomoon.zip. Unzip it to for example ~/butler-icon-upload/fonts/fontawesome. cd to that directory.
 
-We are only interested in the style.css and fonts/icomoon.ttf files, feel free to delete the rest.
+We are only interested in the style.css and fonts/icomoon.ttf files, the rest can be deleted.
 
+# Convert icons to bitmaps
 
-## Convert icons to bitmaps
-You are now ready to convert the icon webfonts to bitmap images. 
+You are now ready to convert the icon webfonts to bitmap images.
 
-First make sure you are in the correct place: 
+First make sure you are in the correct place:
 
-   ```
-	proton:fontawesome goran$ pwd
-	/Users/goran/code/butler-icon-upload/fonts/fontawesome
-	proton:fontawesome goran$ ls -la
-	total 80
-	drwx------@ 4 goran  staff    128 Mar 28 22:02 .
-	drwxr-xr-x  6 goran  staff    192 Mar 28 21:54 ..
-	drwxr-xr-x@ 6 goran  staff    192 Mar 21 09:21 fonts
-	-rwxr-xr-x@ 1 goran  staff  37863 Mar 21 09:21 style.css
-	proton:fontawesome goran$
-   ```
+```bash
+proton:fontawesome goran$ pwd
+/Users/goran/code/butler-icon-upload/fonts/fontawesome
+proton:fontawesome goran$ ls -la
+total 80
+drwx------@ 4 goran  staff    128 Mar 28 22:02 .
+drwxr-xr-x  6 goran  staff    192 Mar 28 21:54 ..
+drwxr-xr-x@ 6 goran  staff    192 Mar 21 09:21 fonts
+-rwxr-xr-x@ 1 goran  staff  37863 Mar 21 09:21 style.css
+proton:fontawesome goran$
+```
 
-Then run a small script in the "script" directoy that will 
+Then run a small script in the "script" directory that will
 
 1. Extract the images from the icon fonts. The square, exported images will be placed in a new folder called "exported".
-2. Convert the images to correct size and aspect ratio. The resulting images will be placed in a directory called "thumbnail". 
+2. Convert the images to the size and aspect ratio used by Qlik Sense sheet icons. The resulting images will be placed in a directory called "thumbnail".
 
-
-```
+```bash
 proton:fontawesome goran$ ../../script/icon_square_to_rect.sh teal
 ~/code/butler-icon-upload/fonts/fontawesome ~/code/butler-icon-upload/fonts/fontawesome
 Exporting icon '500px' as '500px.png'(256x256 pixels)
@@ -162,21 +179,23 @@ proton:fontawesome goran$
 
 The "thumbnail" folder now contains images suitable for upload to Qlik Sense.
 
-## Uploading icons to Qlik Sense
+# Uploading icons to Qlik Sense
 
-### Configuration
+## Configuration
+
 The upload tool relies on certificates to authenticate with Qlik Sense. These needs to be made available to the upload tool:
 
-1. Export a set of certificates from the Sense QMC. 
+1. Export a set of certificates from the Sense QMC.
 2. Copy config/default_template.yaml to config/default.yaml
 3. Edit default.yaml so it points to your Sense server and certificates.
 
-
 Note!  
-Using certificates is powerful and convenient, but you should be careful with the certificates - if they get in the wrong hand they will provide full access to your Sense environment. Thus keep tight control of them, and always maintain strict firewall rules, to ensure that access is only possible from desired network locations. 
+Using certificates is powerful and convenient, but you should be careful with the certificates - if they get in the wrong hand they will provide full access to your Sense environment.  
+Thus keep tight control of them and always maintain strict firewall rules on your Sense server(s).  
+This helps ensuring that access is only possible from desired network locations.
 
+## Uploading icons
 
-### Uploading icons
 Before uploading the images to a Sense content library, please keep a couple of things in mind:
 
 * The content library you upload images to must exist. You will get a 404 error if it doesn't.
@@ -185,41 +204,44 @@ Before uploading the images to a Sense content library, please keep a couple of 
 
 Upload the images. Below a small set of three images are uploaded.
 
-```
-proton:butler-icon-upload goran$ pwd
-/Users/goran/code/butler-icon-upload
-proton:butler-icon-upload goran$ node icon_uploader.js --iconfolder ./fonts/fontawesome/thumbnail/ --contentlibrary "Font Awesome thumbnails (teal)"
-2018-03-29T06:27:10.298Z - info: Starting Qlik Sense icon uploader
-2018-03-29T06:27:10.300Z - info: Log level is: info
-2018-03-29T06:27:10.302Z - info: Using icons in folder: /Users/goran/code/butler-icon-upload/fonts/fontawesome/thumbnail
-2018-03-29T06:27:10.302Z - info: Uploading icons to Qlik Sense content library: Font Awesome thumbnails (teal)
-2018-03-29T06:27:10.303Z - info: Uploading file: /Users/goran/code/butler-icon-upload/fonts/fontawesome/thumbnail/500px.png
-2018-03-29T06:27:10.310Z - info: Uploading file: /Users/goran/code/butler-icon-upload/fonts/fontawesome/thumbnail/address-book-o.png
-2018-03-29T06:27:10.311Z - info: Uploading file: /Users/goran/code/butler-icon-upload/fonts/fontawesome/thumbnail/address-book.png
-proton:butler-icon-upload goran$
+```bash
+➜  butler-icon-upload node icon_uploader.js -c "Thumbnails (red)" -i ./../../butler-icon-upload/fonts/fontawesome/thumbnail_red --upload-interval 100
+2022-02-01T14:40:08.620Z info: --------------------------------------
+2022-02-01T14:40:08.621Z info: Starting Qlik Sense icon uploader
+2022-02-01T14:40:08.621Z info: Log level: info
+2022-02-01T14:40:08.621Z info: App version: 2.2.0
+2022-02-01T14:40:08.621Z info: --------------------------------------
+2022-02-01T14:40:08.622Z info: Using icons in folder: /Users/goran/code/butler-icon-upload/fonts/fontawesome/thumbnail_red
+2022-02-01T14:40:08.622Z info: Uploading icons to Qlik Sense content library: Thumbnails (red)
+2022-02-01T14:40:08.622Z info: Image upload interval: 100 (ms)
+2022-02-01T14:40:08.622Z info: Image upload timeout: 5000 (ms)
+2022-02-01T14:40:08.622Z info: Image upload retry count: 5
+2022-02-01T14:40:08.623Z info: Image upload retry interval: 10000 (ms)
+2022-02-01T14:40:08.653Z info: 675 files added to upload queue
+2022-02-01T14:40:08.655Z info: Uploading file (attempt 1): /Users/goran/code/butler-icon-upload/fonts/fontawesome/thumbnail_red/address-book-o.png
+2022-02-01T14:40:09.258Z info: Uploading file (attempt 1): /Users/goran/code/butler-icon-upload/fonts/fontawesome/thumbnail_red/address-book.png
+2022-02-01T14:40:09.666Z info: Uploading file (attempt 1): /Users/goran/code/butler-icon-upload/fonts/fontawesome/thumbnail_red/address-card-o.png
+2022-02-01T14:40:10.080Z info: Uploading file (attempt 1): /Users/goran/code/butler-icon-upload/fonts/fontawesome/thumbnail_red/address-card.png
+2022-02-01T14:40:10.496Z info: Uploading file (attempt 1): /Users/goran/code/butler-icon-upload/fonts/fontawesome/thumbnail_red/adjust.png
+...
 ```
 
 You should now be able to access the images from within Sense apps:
 
 ![Content library in Qlik Sense](./img/Icon_upload_demo_1.png "New icons available")
 
-
-
-
-## Troubleshooting
+# Troubleshooting
 
 * Make sure port 4242 (on the Sense server where QRS is running) accepts connections from the computer where you run the icon upload tool.
 * Running the upload tool itself should be fine on Windows (not tested though). Running the image processing tools (Magick etc) will be difficult on Windows. Possibly possible, not tested though.
 
+# Changelog
 
-## Changelog
-The changelog is available on the releases page.
+The changelog is available in the [changelog file](https://github.com/ptarmiganlabs/butler-icon-upload/blob/master/CHANGELOG.md).
 
+# References & resources
 
-## References & resources
-* At [Ptarmigan Labs](https://ptarmiganlabs.com) you find various Qlik Sense related blog posts, including a couple on how to use icons in Qlik Sense.
 * Additional DevOps/SenseOps related tools are available on my [Github page](https://github.com/ptarmiganlabs).
+* Specifically relating to Qlik Sense icons, the [Butler Sheet Icons](https://github.com/ptarmiganlabs/butler-sheet-icons) makes it trivial to create sheet thumbnail icons in Qlik Sense apps.
+* At [Ptarmigan Labs](https://ptarmiganlabs.com) you find various Qlik Sense related blog posts, including a couple on how to use icons in Qlik Sense.
 * Qlik's [help pages](https://help.qlik.com) are good.
-
-
-
