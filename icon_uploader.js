@@ -1,5 +1,4 @@
 ﻿const fs = require('fs');
-// var fs = require('fs-extra');
 const path = require('path');
 const QrsInteract = require('qrs-interact');
 const config = require('config');
@@ -26,9 +25,41 @@ const args = require('yargs')
         'node $0 -i ./icons -c "My icons"',
         'Uploads icons in ./icons folder to content library named "My icons"'
     )
+    .option('iconfolder', {
+        alias: 'i',
+        demandOption: true,
+        describe: 'Path to directory where icon files are located',
+    })
+    .option('contentlibrary', {
+        alias: 'c',
+        demandOption: true,
+        describe: 'Name of Qlik Sense content library to which icons iwll be uploaded',
+    })
+    .option('upload-interval', {
+        demandOption: false,
+        default: 2000,
+        describe: 'Time to wait between icon uploads (milliseconds)',
+    })
+    .option('upload-timeout', {
+        demandOption: false,
+        default: 5000,
+        describe: 'Time to wait for upload to complete (milliseconds)',
+    })
+    .option('upload-retries', {
+        demandOption: false,
+        default: 5,
+        describe: 'Number of retry attempts to make if an uploade fails',
+    })
+    .option('upload-retry-interval', {
+        demandOption: false,
+        default: 10000,
+        describe: 'Time to wait between retry attempts (milliseconds)',
+    })
     .demandOption(['i', 'c'])
-    .alias('i', 'iconfolder')
-    .alias('c', 'contentlibrary')
+    .epilogue(
+        'for more information, please visit https://github.com/ptarmiganlabs/butler-icon-upload'
+    )
+    .wrap(120)
     .alias('h', 'help').argv;
 
 // Get app version from package.json file
@@ -66,16 +97,12 @@ const logger = winston.createLogger({
 // Function to get current logging level
 const getLoggingLevel = () => logTransports.find((transport) => transport.name === 'console').level;
 
-logger.debug(`QRS config: ${configQRS}`);
-logger.info(`Using icons in folder: ${iconFolderAbsolute}`);
-logger.info(`Uploading icons to Qlik Sense content library: ${contentlibrary}`);
-
 // Upload queue
 const tqueue = new TimerQueue({
-    interval: 2000,
-    timeout: 5000,
-    retry: 5,
-    retryInterval: 10000,
+    interval: args.uploadInterval,
+    timeout: args.uploadTimeout,
+    retry: args.uploadRetries,
+    retryInterval: args.uploadRetryInterval,
     autostart: false,
 });
 
@@ -93,10 +120,19 @@ logger.info(`Log level: ${getLoggingLevel()}`);
 logger.info(`App version: ${appVersion}`);
 logger.info('--------------------------------------');
 
-// Debug output of Node.js environment
-logger.info(`NODE_CONFIG_DIR: ${config.util.getEnv('NODE_CONFIG_DIR')}`);
-logger.info(`NODE_ENV: ${config.util.getEnv('NODE_ENV')}`);
-logger.info(`NODE_CONFIG_ENV: ${config.util.getEnv('NODE_CONFIG_ENV')}`);
+// Node.js environment variables
+logger.verbose(`NODE_CONFIG_DIR: ${config.util.getEnv('NODE_CONFIG_DIR')}`);
+logger.verbose(`NODE_ENV: ${config.util.getEnv('NODE_ENV')}`);
+logger.verbose(`NODE_CONFIG_ENV: ${config.util.getEnv('NODE_CONFIG_ENV')}`);
+
+logger.debug(`QRS config: ${configQRS}`);
+logger.info(`Using icons in folder: ${iconFolderAbsolute}`);
+logger.info(`Uploading icons to Qlik Sense content library: ${contentlibrary}`);
+
+logger.info(`Image upload interval: ${args.uploadInterval} (ms)`);
+logger.info(`Image upload timeout: ${args.uploadTimeout} (ms)`);
+logger.info(`Image upload retry count: ${args.uploadRetries}`);
+logger.info(`Image upload retry interval: ${args.uploadRetryInterval} (ms)`);
 
 function addFiles() {
     return new Promise((resolve, reject) => {
