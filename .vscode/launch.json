@@ -4,13 +4,23 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+    
         {
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
+            "runtimeExecutable": "/usr/local/bin/node",
             "program": "${workspaceFolder}/icon_uploader.js",
+            "skipFiles": ["<node_internals>/**"],
+            "env": {
+                "NODE_CONFIG_DIR": "${workspaceFolder}/config",
+                "NODE_ENV": "production"
+            },
             "args": [
-                "--iconfolder", "./fonts/fontawesome/thumbnail", "--contentlibrary", "Font","Awesome","thumbnails","(teal)"
+                "-i",
+                "./fonts/fontawesome/thumbnail_green",
+                "-c",
+                "Thumbnails (green)"
             ]
         }
     ]
