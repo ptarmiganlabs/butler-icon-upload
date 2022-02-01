@@ -200,7 +200,7 @@ function addFiles() {
 
 async function mainFunction() {
     await addFiles();
-    logger.info('All files added to queue');
+    logger.info(`${tqueue.queue.length} files added to upload queue`);
     tqueue.start();
 }
 
