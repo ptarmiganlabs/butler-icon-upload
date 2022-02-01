@@ -30,7 +30,7 @@
   ],
   "packages": {
     ".": {
-      "package-name": "butler-cw"
+      "package-name": "butler-icon-upload"
     }
   }
 }
