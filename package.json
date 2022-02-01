@@ -9,11 +9,11 @@
   "author": "Göran Sander, Ptarmigan Labs AB",
   "license": "ISC",
   "dependencies": {
-    "config": "^1.30.0",
+    "config": "^3.0.0",
     "glob": "^7.1.2",
     "js-yaml": "^3.11.0",
-    "qrs-interact": "^3.0.1",
+    "qrs-interact": "^4.0.0",
     "winston": "^3.0.0",
-    "yargs": "^12.0.2"
+    "yargs": "^15.0.0"
   }
 }
