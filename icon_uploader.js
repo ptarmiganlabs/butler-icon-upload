@@ -62,6 +62,10 @@ const args = require('yargs')
     .wrap(120)
     .alias('h', 'help').argv;
 
+// Retry counter. Used to keep track of how many upload attempts have been done for the file that's currently being processed
+let attemptNumber = 1;
+
+
 // Get app version from package.json file
 const appVersion = require('./package.json').version;
 
@@ -152,7 +156,9 @@ function addFiles() {
                     tqueue.push(() => {
                         const promise = new Promise((resolve2, reject2) => {
                             try {
-                                logger.info(`Uploading file: ${fileFullPath}`);
+                                logger.info(
+                                    `Uploading file (attempt ${attemptNumber}): ${fileFullPath}`
+                                );
 
                                 const apiURL = `/contentlibrary/${encodeURIComponent(
                                     contentlibrary
@@ -165,29 +171,31 @@ function addFiles() {
                                     .then((result) => {
                                         logger.debug(`result=${JSON.stringify(result)}`);
                                         logger.verbose(`Done: ${file}`);
+                                        attemptNumber = 1;
                                         resolve2();
                                     })
                                     .catch((err) => {
                                         // Return error msg
+                                        logger.error(`${err}`);
                                         logger.error(
-                                            `Error (1) uploading "${file}" to content library: ${err}`
+                                            `Will try ${args.uploadRetries} times with a ${args.uploadRetryInterval} ms pause in between retries.`
                                         );
-                                        logger.error(`Will retry a few times..`);
+                                        attemptNumber += 1;
                                         reject2(new Error('retry'));
                                     });
-                            } catch (err) {
+                            } catch (err2) {
                                 // Return error msg
                                 logger.error(
-                                    `Error (2) uploading "${file}" to content library: ${err}`
+                                    `Error (2) uploading "${file}" to content library: ${err2}`
                                 );
-                                logger.error(`Will retry a few times..`);
+                                logger.error(err2);
                                 reject2(new Error('retry'));
                             }
                         });
                         return promise;
                     });
                 } else if (fileStat.isDirectory()) {
-                    logger.verbose(`${fileFullPath} is a directory.`);
+                    logger.verbose(`${fileFullPath} is a directory. Skipping.`);
                 }
             }
             resolve();
