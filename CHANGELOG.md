@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.0.0](https://github.com/ptarmiganlabs/butler-icon-upload/compare/butler-icon-upload-v2.2.0...butler-icon-upload-v3.0.0) (2022-02-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* All options now set via command line
+
+### Features
+
+* All options now set via command line ([2aa19f9](https://github.com/ptarmiganlabs/butler-icon-upload/commit/2aa19f91b1d4929dea5d8656e58476bfd2872810)), closes [#43](https://github.com/ptarmiganlabs/butler-icon-upload/issues/43)
+* Create stand-alone binaries for common OSs ([70b7272](https://github.com/ptarmiganlabs/butler-icon-upload/commit/70b727201b67d49b7277aae8854bad70a0c09d28))
+
+
+### Miscellaneous
+
+* Update dependencies ([010009a](https://github.com/ptarmiganlabs/butler-icon-upload/commit/010009a415d65c949e089c3457796a0872ce2c5a))
+
 ## [2.2.0](https://github.com/ptarmiganlabs/butler-icon-upload/compare/butler-icon-upload-v2.1.0...butler-icon-upload-v2.2.0) (2022-02-01)
 
 
