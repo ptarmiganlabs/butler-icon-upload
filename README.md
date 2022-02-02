@@ -4,6 +4,7 @@
 <h3 align="center">Butler Icon Upload makes it easy to use free, professional quality icons and images in Qlik Sense Enterprise on Windows</h3>
 <p align="center">
 <a href="https://github.com/ptarmiganlabs/butler-icon-upload"><img src="https://img.shields.io/badge/Source---" alt="Source"></a>
+<a href="https://github.com/ptarmiganlabs/butler-icon-upload/actions/workflows/release-please.yml"><img src="https://github.com/ptarmiganlabs/butler-icon-upload/actions/workflows/release-please.yml/badge.svg?branch=master" alt="CI"></a>
 </p>
 <br>
 <br>
@@ -14,6 +15,7 @@
 
 * Thousands of free icons available, including Google Material Design, Font Awesome and others.
 * Batch upload of icons and images to Qlik Sense. No more 50-at-a-time uploads.
+* Stand-alone executables available for Windows, Linux, Alpine Linux and macOS. 
 * The tool was created with Qlik Sense Enterprise on Windows.
 
 # Table of contents
@@ -21,6 +23,11 @@
 - [Features](#features)
 - [Table of contents](#table-of-contents)
 - [Installation](#installation)
+  - [Extract icon files from icon fonts](#extract-icon-files-from-icon-fonts)
+  - [Convert icons files to correct format](#convert-icons-files-to-correct-format)
+  - [Installing Butler Sheet Icons](#installing-butler-sheet-icons)
+    - [Stand-alone executables](#stand-alone-executables)
+    - [Node.js application](#nodejs-application)
 - [Finding icons](#finding-icons)
   - [Download icons](#download-icons)
 - [Convert icons to bitmaps](#convert-icons-to-bitmaps)
@@ -33,6 +40,66 @@
 
 # Installation
 
+Installation can be done in two ways.  
+Both achieve the same end result, which is images uploaded to Qlik Sense.
+
+There are a few pre-requisites that are common for both installation options, these are described first.
+
+## Extract icon files from icon fonts
+
+If you want to convert existing icon fonts to bitmap images, you need to install [Icon Font to PNG](https://github.com/Pythonity/icon-font-to-png).  
+This tool is not needed if your images are already in bitmap (png) format.
+
+Let's try it:
+
+```bash
+proton:butler-icon-upload goran$ icon-font-to-png
+usage: icon-font-to-png [-h] [--list] [--download {font-awesome,octicons}]
+                        [--ttf TTF-FILE] [--css CSS-FILE] [--size SIZE]
+                        [--scale SCALE] [--color COLOR] [--filename FILENAME]
+                        [--keep_prefix]
+                        [icons [icons ...]]
+icon-font-to-png: error: You have to provide CSS and TTF files
+```
+
+## Convert icons files to correct format
+
+[ImageMagick](https://www.imagemagick.org) is a very powerful tool for working with image files.  
+It may be difficult to run ImageMagick on a Windows computer, so Linux or OSX is recommended.
+
+ImageMagick is used to modify the images so they get the correct size and aspect ratio for use as sheet icons.  
+If this step is not done square images will appear as stretched when used as sheet icons.
+
+```bash
+➜  butler-icon-upload convert
+Version: ImageMagick 7.1.0-19 Q16-HDRI x86_64 2021-12-22 https://imagemagick.org
+Copyright: (C) 1999-2021 ImageMagick Studio LLC
+License: https://imagemagick.org/script/license.php
+Features: Cipher DPC HDRI Modules OpenMP(5.0)
+Delegates (built-in): bzlib fontconfig freetype gslib heic jng jp2 jpeg lcms lqr ltdl lzma openexr png ps tiff webp xml zlib
+Compiler: gcc (4.2)
+Usage: convert [options ...] file [ [options ...] file ...] [options ...] file
+
+Image Settings:
+  -adjoin              join images into a single multi-image file
+  -affine matrix       affine transform matrix
+  -alpha option        activate, deactivate, reset, or set the alpha channel
+  -antialias           remove pixel-aliasing
+...
+```
+
+## Installing Butler Sheet Icons
+
+### Stand-alone executables
+
+On the release page you find ZIP files with executables for different operating systems.
+
+
+### Node.js application
+
+This option is easiest to get started with.  
+It uses stand-alone executable files that include everything needed to run Butler Icon Upload
+
 The tool is built using Node.js, please refer to the [Node.js site](https://nodejs.org/en/) for installation instructions for your platform (OSX/Windows/Linux).  
 The latest LTS version of Node.js is usually a good choice.  
 
@@ -40,19 +107,14 @@ Your milage on especially Windows may vary due to some libraries used by this to
 It's mainly the image manipulation parts that don't work well on Windows, the icon uploading part (i.e. the Node.js app) should be ok.
 Linux should work without issues.
 
-If you want to convert existing icon fonts to bitmap images, you also need to install [Icon Font to PNG](https://github.com/Pythonity/icon-font-to-png).  
-This utility is not needed if your images are already in bitmap (png or jpg) format.
+
 
 With that in place, you should install the actual upload tool.
 
-* Download the tool from the [releases page](https://github.com/ptarmiganlabs/butler-icon-upload/releases).
+* Download the tool from the [releases page](https://github.com/ptarmiganlabs/butler-icon-upload/releases). Use either the source code (which requires Node.js) 
 * Unzip to suitable location, for example ~/butler-icon-upload. cd into this directory.
 * Install dependencies by running `npm install`.
 
-The final tool you need is [ImageMagick](https://www.imagemagick.org).  
-This might be hard to run on a Windows computer, so Linux or OSX is recommended.  
-ImageMagick is used to modify the images so they get the correct aspect ratio.  
-If this step is not done square images will appear as stretched when used as sheet icons.
 
 Test your work so far. You should see output similar to the below.
 
@@ -79,39 +141,8 @@ Missing required arguments: iconfolder, contentlibrary, i, c
 ➜  butler-icon-upload
 ```
 
-Let's test the "Icon Font to PNG" tool too:
 
-```bash
-proton:butler-icon-upload goran$ icon-font-to-png
-usage: icon-font-to-png [-h] [--list] [--download {font-awesome,octicons}]
-                        [--ttf TTF-FILE] [--css CSS-FILE] [--size SIZE]
-                        [--scale SCALE] [--color COLOR] [--filename FILENAME]
-                        [--keep_prefix]
-                        [icons [icons ...]]
-icon-font-to-png: error: You have to provide CSS and TTF files
-```
 
-And ImageMagick:
-
-```bash
-➜  butler-icon-upload convert
-Version: ImageMagick 7.1.0-19 Q16-HDRI x86_64 2021-12-22 https://imagemagick.org
-Copyright: (C) 1999-2021 ImageMagick Studio LLC
-License: https://imagemagick.org/script/license.php
-Features: Cipher DPC HDRI Modules OpenMP(5.0)
-Delegates (built-in): bzlib fontconfig freetype gslib heic jng jp2 jpeg lcms lqr ltdl lzma openexr png ps tiff webp xml zlib
-Compiler: gcc (4.2)
-Usage: convert [options ...] file [ [options ...] file ...] [options ...] file
-
-Image Settings:
-  -adjoin              join images into a single multi-image file
-  -affine matrix       affine transform matrix
-  -alpha option        activate, deactivate, reset, or set the alpha channel
-  -antialias           remove pixel-aliasing
-...
-...
-
-```
 
 Great - you now have the tools needed to batch convert and upload icons and images to Qlik Sense.
 
