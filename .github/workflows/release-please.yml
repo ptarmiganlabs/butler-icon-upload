@@ -41,6 +41,10 @@ jobs:
           ${{ steps.release.outputs.release_created }}
         uses: actions/checkout@v2
 
+      - name: Install dependencies
+        if: ${{ steps.release.outputs.release_created }}
+        run: npm install
+
       - name: Install tool for creating stand-alone executables
         if: ${{ steps.release.outputs.release_created }}
         run: npm install -g pkg
