@@ -17,6 +17,21 @@
 * Batch upload of icons and images to Qlik Sense. No more 50-at-a-time uploads.
 * The tool was written with Sense enterprise in mind. Should be possible to adopt to Qlik Sense desktop too.
 
+# Table of contents
+
+- [Features](#features)
+- [Table of contents](#table-of-contents)
+- [Installation](#installation)
+- [Finding icons](#finding-icons)
+  - [Download icons](#download-icons)
+- [Convert icons to bitmaps](#convert-icons-to-bitmaps)
+- [Uploading icons to Qlik Sense](#uploading-icons-to-qlik-sense)
+  - [Configuration](#configuration)
+  - [Uploading icons](#uploading-icons)
+- [Troubleshooting](#troubleshooting)
+- [Changelog](#changelog)
+- [References & resources](#references--resources)
+
 # Installation
 
 The tool is built using Node.js, please refer to the [Node.js site](https://nodejs.org/en/) for installation instructions for your platform (OSX/Windows/Linux).  

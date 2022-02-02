@@ -1,9 +1,0 @@
-iconUploader:
-  # Possible log levels are silly, debug, verbose, info, warn, error
-  logLevel: info
-
-  # Info needed to connect to the repository service (QRS)
-  qrs:
-    host: <Sense host where QRS is running>
-    clientCertPath: /path/to/client/certificate/client.pem
-    clientCertKeyPath: /path/to/client/certificate/client_key.pem
