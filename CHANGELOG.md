@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.0.1](https://github.com/ptarmiganlabs/butler-icon-upload/compare/butler-icon-upload-v3.0.0...butler-icon-upload-v3.0.1) (2022-02-02)
+
+
+### Miscellaneous
+
+* Fix broken deployment logic for binaries ([84a5b1d](https://github.com/ptarmiganlabs/butler-icon-upload/commit/84a5b1d064d5ea4b5c43a755201e7b8e462de96d))
+
 ## [3.0.0](https://github.com/ptarmiganlabs/butler-icon-upload/compare/butler-icon-upload-v2.2.0...butler-icon-upload-v3.0.0) (2022-02-02)
 
 
