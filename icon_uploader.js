@@ -1,23 +1,8 @@
 ﻿const fs = require('fs');
 const path = require('path');
 const QrsInteract = require('qrs-interact');
-const config = require('config');
 const winston = require('winston');
 const TimerQueue = require('timer-queue');
-
-// Set up Sense repository service configuration
-const configQRS = {
-    hostname: config.get('iconUploader.qrs.host'),
-    certificates: {
-        certFile: config.get('iconUploader.qrs.clientCertPath'),
-        keyFile: config.get('iconUploader.qrs.clientCertKeyPath'),
-    },
-};
-
-configQRS.headers = {
-    'X-Qlik-User': 'UserDirectory=Internal; UserId=sa_repository',
-    'Content-Type': 'png',
-};
 
 const args = require('yargs')
     .usage('Usage: $0 -i [path/to/icon/files] -c [content library name]')
@@ -25,15 +10,32 @@ const args = require('yargs')
         'node $0 -i ./icons -c "My icons"',
         'Uploads icons in ./icons folder to content library named "My icons"'
     )
+    .option('host', {
+        demandOption: true,
+        describe: 'Host name or IP of Qlik Sense server',
+    })
+    .option('cert', {
+        demandOption: true,
+        default: './cert/client.pem',
+        describe: 'Path to certificate used when connecting to Qlik Sense',
+    })
+    .option('certkey', {
+        demandOption: true,
+        default: './cert/client_key.pem',
+        describe: 'Path to certificate key used when connecting to Qlik Sense',
+    })
     .option('iconfolder', {
-        alias: 'i',
         demandOption: true,
         describe: 'Path to directory where icon files are located',
     })
     .option('contentlibrary', {
-        alias: 'c',
         demandOption: true,
         describe: 'Name of Qlik Sense content library to which icons iwll be uploaded',
+    })
+    .option('loglevel', {
+        demandOption: false,
+        default: 'info',
+        describe: 'Log level',
     })
     .option('upload-interval', {
         demandOption: false,
@@ -55,16 +57,28 @@ const args = require('yargs')
         default: 10000,
         describe: 'Time to wait between retry attempts (milliseconds)',
     })
-    .demandOption(['i', 'c'])
     .epilogue(
         'for more information, please visit https://github.com/ptarmiganlabs/butler-icon-upload'
     )
-    .wrap(120)
+    .wrap(140)
     .alias('h', 'help').argv;
 
 // Retry counter. Used to keep track of how many upload attempts have been done for the file that's currently being processed
 let attemptNumber = 1;
 
+// Set up Sense repository service configuration
+const configQRS = {
+    hostname: args.host,
+    certificates: {
+        certFile: args.cert,
+        keyFile: args.certkey,
+    },
+};
+
+configQRS.headers = {
+    'X-Qlik-User': 'UserDirectory=Internal; UserId=sa_repository',
+    'Content-Type': 'png',
+};
 
 // Get app version from package.json file
 const appVersion = require('./package.json').version;
@@ -80,7 +94,7 @@ const logTransports = [];
 logTransports.push(
     new winston.transports.Console({
         name: 'console',
-        level: config.get('iconUploader.logLevel'),
+        level: args.loglevel,
         format: winston.format.combine(
             winston.format.timestamp(),
             winston.format.colorize(),
@@ -123,11 +137,6 @@ logger.info('Starting Qlik Sense icon uploader');
 logger.info(`Log level: ${getLoggingLevel()}`);
 logger.info(`App version: ${appVersion}`);
 logger.info('--------------------------------------');
-
-// Node.js environment variables
-logger.verbose(`NODE_CONFIG_DIR: ${config.util.getEnv('NODE_CONFIG_DIR')}`);
-logger.verbose(`NODE_ENV: ${config.util.getEnv('NODE_ENV')}`);
-logger.verbose(`NODE_CONFIG_ENV: ${config.util.getEnv('NODE_CONFIG_ENV')}`);
 
 logger.debug(`QRS config: ${configQRS}`);
 logger.info(`Using icons in folder: ${iconFolderAbsolute}`);
