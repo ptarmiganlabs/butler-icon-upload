@@ -49,10 +49,10 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
         run: |
           mkdir bin
-          pkg --output bin/${DIST_FILE_NAME}-alpine -t node16-alpine-x64 index.js
-          pkg --output bin/${DIST_FILE_NAME}-linux -t node16-linux-x64 index.js
-          pkg --output bin/${DIST_FILE_NAME}-macos -t node16-macos-x64 index.js
-          pkg --output bin/${DIST_FILE_NAME}-win.exe -t node16-win-x64 index.js
+          pkg --output bin/${DIST_FILE_NAME}-alpine -t node16-alpine-x64 icon_uploader.js
+          pkg --output bin/${DIST_FILE_NAME}-linux -t node16-linux-x64 icon_uploader.js
+          pkg --output bin/${DIST_FILE_NAME}-macos -t node16-macos-x64 icon_uploader.js
+          pkg --output bin/${DIST_FILE_NAME}-win.exe -t node16-win-x64 icon_uploader.js
 
       - name: Compress binaries
         if: ${{ steps.release.outputs.release_created }}
