@@ -13,9 +13,8 @@
 # Features
 
 * Thousands of free icons available, including Google Material Design, Font Awesome and others.
-* The upload tool handles any image format accepted by Qlik Sense.
 * Batch upload of icons and images to Qlik Sense. No more 50-at-a-time uploads.
-* The tool was written with Sense enterprise in mind. Should be possible to adopt to Qlik Sense desktop too.
+* The tool was created with Qlik Sense Enterprise on Windows.
 
 # Table of contents
 
