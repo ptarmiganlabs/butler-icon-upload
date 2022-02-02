@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.0.2](https://github.com/ptarmiganlabs/butler-icon-upload/compare/butler-icon-upload-v3.0.1...butler-icon-upload-v3.0.2) (2022-02-02)
+
+
+### Miscellaneous
+
+* Fix broken stand-alone binaries ([e9eda4f](https://github.com/ptarmiganlabs/butler-icon-upload/commit/e9eda4f55314bcfd9527836188955215e515b7cd))
+
 ### [3.0.1](https://github.com/ptarmiganlabs/butler-icon-upload/compare/butler-icon-upload-v3.0.0...butler-icon-upload-v3.0.1) (2022-02-02)
 
 
