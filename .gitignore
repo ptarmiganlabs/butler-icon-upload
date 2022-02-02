@@ -10,6 +10,7 @@ cert/*.pfx
 .DS_Store
 ssl/*
 *.tmp
+bin/*
 
 # Logs
 log/

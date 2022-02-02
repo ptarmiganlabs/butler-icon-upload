@@ -11,6 +11,7 @@ jobs:
     env:
       GITHUB_REF: ${{ github.ref }}
       GITHUB_TOKEN: ${{ secrets.PAT }}
+      DIST_FILE_NAME: butler-icon-upload
     steps:
       - name: Show github.ref
         run: echo "$GITHUB_REF"
@@ -34,3 +35,57 @@ jobs:
           echo "patch: ${{ steps.release.outputs.patch }}"
           echo "sha: ${{ steps.release.outputs.sha }}"
           echo "pr: ${{ steps.release.outputs.pr }}"
+
+      - name: Checkout repository
+        if: |
+          ${{ steps.release.outputs.release_created }}
+        uses: actions/checkout@v2
+
+      - name: Install tool for creating stand-alone executables
+        if: ${{ steps.release.outputs.release_created }}
+        run: npm install -g pkg
+
+      - name: Package stand-alone binaries
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          mkdir bin
+          pkg --output bin/${DIST_FILE_NAME}-alpine -t node16-alpine-x64 index.js
+          pkg --output bin/${DIST_FILE_NAME}-linux -t node16-linux-x64 index.js
+          pkg --output bin/${DIST_FILE_NAME}-macos -t node16-macos-x64 index.js
+          pkg --output bin/${DIST_FILE_NAME}-win.exe -t node16-win-x64 index.js
+
+      - name: Compress binaries
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          mkdir dist
+          zip dist/${DIST_FILE_NAME}-alpine.zip bin/${DIST_FILE_NAME}-alpine
+          zip dist/${DIST_FILE_NAME}-linux.zip bin/${DIST_FILE_NAME}-linux
+          zip dist/${DIST_FILE_NAME}-macos.zip bin/${DIST_FILE_NAME}-macos
+          zip dist/${DIST_FILE_NAME}-win.zip bin/${DIST_FILE_NAME}-win.exe
+
+      - name: Debug
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          ls -la
+          ls -la bin
+          ls -la dist
+
+      - name: Upload build artifacts
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: OS specific executables
+          path: dist/*
+
+      - name: Upload Release
+        if: ${{ steps.release.outputs.release_created }}
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          omitBodyDuringUpdate: true
+          omitNameDuringUpdate: true
+          artifactContentType: zip
+          draft: true
+          tag: ${{ steps.release.outputs.tag_name }}
+          artifacts: dist/*
+          token: ${{ github.token }}
