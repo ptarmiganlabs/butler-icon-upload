@@ -1,6 +1,6 @@
 {
   "name": "icon_uploader",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "description": "Uploads icons into Qlik Sense content library",
   "main": "icon_uploader.js",
   "scripts": {
