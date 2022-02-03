@@ -16,10 +16,16 @@ body:
       required: true
   - type: input
     attributes:
-      label: What version of Node.js are you using? Not applicable if you use the standalone executable.
+      label: What version of Node.js are you using? Not applicable if you use the standalone version of Butler Icon Upload.
       description: '`node --version` - For example: 16.0.0'
     validations:
       required: false
+  - type: input
+    attributes:
+      label: What command did you use to start Butler Icon Upload?
+      description: 'Please include all parameters!'
+    validations:
+      required: true
   - type: input
     attributes:
       label: What operating system are you using?
