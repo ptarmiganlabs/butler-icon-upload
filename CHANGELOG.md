@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.0](https://github.com/ptarmiganlabs/butler-icon-upload/compare/butler-icon-upload-v3.0.2...butler-icon-upload-v3.1.0) (2022-02-03)
+
+
+### Features
+
+* Sign and notarise macOS binaries ([ba8e69a](https://github.com/ptarmiganlabs/butler-icon-upload/commit/ba8e69a0f8d837051254ff929001f6181293edb0)), closes [#52](https://github.com/ptarmiganlabs/butler-icon-upload/issues/52)
+
 ### [3.0.2](https://github.com/ptarmiganlabs/butler-icon-upload/compare/butler-icon-upload-v3.0.1...butler-icon-upload-v3.0.2) (2022-02-02)
 
 
