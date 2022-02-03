@@ -11,6 +11,10 @@
 <br>
 <br>
 
+
+[![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](LICENSE)
+[![PRs welcome!](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
 # Features
 
 * Thousands of free icons available, including Google Material Design, Font Awesome and others.
