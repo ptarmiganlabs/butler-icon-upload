@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.1.2](https://github.com/ptarmiganlabs/butler-icon-upload/compare/butler-icon-upload-v3.1.1...butler-icon-upload-v3.1.2) (2022-02-03)
+
+
+### Bug Fixes
+
+* CI tweaking ([b3d2c6a](https://github.com/ptarmiganlabs/butler-icon-upload/commit/b3d2c6ac12657155ae03ecff94f6f9a8317c69d3))
+
 ### [3.1.1](https://github.com/ptarmiganlabs/butler-icon-upload/compare/butler-icon-upload-v3.1.0...butler-icon-upload-v3.1.1) (2022-02-03)
 
 
