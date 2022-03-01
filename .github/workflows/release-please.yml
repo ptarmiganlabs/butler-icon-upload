@@ -43,7 +43,7 @@ jobs:
       - name: Checkout repository
         if: |
           ${{ steps.release.outputs.release_created }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install dependencies
         if: ${{ steps.release.outputs.release_created }}
@@ -123,7 +123,7 @@ jobs:
           echo ${{ needs.release-please.outputs.release_upload_url }} 
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Download-Binaries
         uses: actions/download-artifact@v2
