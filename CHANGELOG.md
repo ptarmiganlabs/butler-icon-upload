@@ -1,5 +1,22 @@
 # Changelog
 
+### [3.1.3](https://github.com/ptarmiganlabs/butler-icon-upload/compare/butler-icon-upload-v3.1.2...butler-icon-upload-v3.1.3) (2022-04-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency eslint-config-prettier to v8.5.0 ([4c7a9f1](https://github.com/ptarmiganlabs/butler-icon-upload/commit/4c7a9f1775acafb29d1d9fc2a8925fc564863b85))
+
+
+### Miscellaneous
+
+* **deps:** bump minimist from 1.2.5 to 1.2.6 ([f140581](https://github.com/ptarmiganlabs/butler-icon-upload/commit/f1405814a33687381b9f50b06ee38edbae18b67a))
+* **deps:** update actions/checkout action to v3 ([d2da103](https://github.com/ptarmiganlabs/butler-icon-upload/commit/d2da103a1b68407d1d156b39b9907b95acf63f29))
+* **deps:** update actions/download-artifact action to v3 ([ad97eeb](https://github.com/ptarmiganlabs/butler-icon-upload/commit/ad97eebdceaabb1b3ee807fb31fca1d91ef013b5))
+* **deps:** update actions/upload-artifact action to v3 ([f830f94](https://github.com/ptarmiganlabs/butler-icon-upload/commit/f830f94797afe74312024126547f250af5ecd906))
+* **deps:** update dependency prettier to v2.6.2 ([86fb602](https://github.com/ptarmiganlabs/butler-icon-upload/commit/86fb602d89244e48dc16c39de504001303518a2d))
+* **deps:** update dependency snyk to v1.900.0 ([b4f3db8](https://github.com/ptarmiganlabs/butler-icon-upload/commit/b4f3db8014af8f0a54a2a7558e8e1d44c686927a))
+
 ### [3.1.2](https://github.com/ptarmiganlabs/butler-icon-upload/compare/butler-icon-upload-v3.1.1...butler-icon-upload-v3.1.2) (2022-02-03)
 
 
